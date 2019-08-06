@@ -1,5 +1,4 @@
 <script>
-	import { writable, derived } from 'svelte/store';
 	import { get_scene, get_parent, get_camera } from '../internal/index.mjs';
 	import * as vec3 from 'gl-matrix/vec3';
 	import * as mat4 from 'gl-matrix/mat4';
@@ -52,6 +51,8 @@
 		position: absolute;
 		left: 0;
 		top: 0;
+		user-select: none;
+		-moz-user-select: none;
 	}
 </style>
 

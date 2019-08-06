@@ -1,4 +1,4 @@
-const builtins = new Set(['position', 'normal', 'uv']);
+const builtins = new Set(['POSITION', 'NORMAL', 'UV']);
 
 export default class Geometry {
 	constructor(attributes = {}, opts = {}) {
@@ -6,19 +6,20 @@ export default class Geometry {
 
 		const { index, primitive = 'TRIANGLES' } = opts;
 		this.index = index;
-		this.primitive = primitive;
+		this.primitive = primitive.toUpperCase();
 
 		this.locations = {};
 		this.buffers = {};
 	}
 
-	init(gl, program) {
+	_init(gl, program, material) {
 		this.program = program;
 
 		for (const key in this.attributes) {
 			const attribute = this.attributes[key];
 
-			this.locations[key] = gl.getAttribLocation(program, builtins.has(key) ? key.toUpperCase() : key);
+			const upper = key.toUpperCase();
+			this.locations[key] = gl.getAttribLocation(program, builtins.has(upper) ? upper : key);
 
 			const buffer = gl.createBuffer();
 			if (!this.buffers[key]) this.buffers[key] = buffer;
@@ -36,7 +37,7 @@ export default class Geometry {
 	}
 
 	// TODO should this be a public method?
-	set_attributes(gl) {
+	_set_attributes(gl) {
 		for (const key in this.attributes) {
 			const attribute = this.attributes[key];
 
@@ -68,13 +69,5 @@ export default class Geometry {
 				offset
 			);
 		}
-	}
-
-	get_attribute(name) {
-		return this.attributes[name];
-	}
-
-	set_attribute(name, attribute) {
-		this.attributes[name] = attribute;
 	}
 }
